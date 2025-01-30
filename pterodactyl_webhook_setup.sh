@@ -2,12 +2,10 @@
 
 set -e
 
-# Function to check if a command exists
 command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
-# Ensure necessary dependencies are installed
 echo "Checking dependencies..."
 if ! command_exists php; then
     echo "PHP is not installed. Please install PHP and try again."
@@ -19,18 +17,14 @@ if ! command_exists git; then
     exit 1
 fi
 
-# Define the base directory (assuming script is run from Pterodactyl root)
 BASE_DIR=$(pwd)
 
-# Upload the PANEL folder
 echo "Uploading PANEL folder..."
 cp -r PANEL "$BASE_DIR"
 
-# Run migrations
 echo "Running migrations..."
 php artisan migrate
 
-# Modify necessary files
 echo "Modifying files..."
 
 declare -A FILE_CHANGES=(
@@ -56,8 +50,8 @@ declare -A FILE_CHANGES=(
 for file in "${!FILE_CHANGES[@]}"; do
     if [[ -f "$BASE_DIR/$file" ]]; then
         echo "Modifying $file..."
-        sed -i "/${FILE_CHANGES[$file]}/a \
-        'webhook_url' => 'string|nullable'," "$BASE_DIR/$file"
+        sed -i "/${FILE_CHANGES[$file]}/a \\
+        'webhook_url' => 'string|nullable';" "$BASE_DIR/$file"
     else
         echo "Skipping $file (not found)"
     fi
