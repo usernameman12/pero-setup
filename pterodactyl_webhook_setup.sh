@@ -50,8 +50,8 @@ declare -A FILE_CHANGES=(
 for file in "${!FILE_CHANGES[@]}"; do
     if [[ -f "$BASE_DIR/$file" ]]; then
         echo "Modifying $file..."
-        sed -i "/${FILE_CHANGES[$file]}/a \\
-        'webhook_url' => 'string|nullable';" "$BASE_DIR/$file"
+        sed -i "/${FILE_CHANGES[$file]}/a\\
+'webhook_url' => 'string|nullable';" "$BASE_DIR/$file"
     else
         echo "Skipping $file (not found)"
     fi
